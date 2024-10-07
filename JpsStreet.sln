@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35303.130
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{5064D873-5CC4-486D-A13E-CC92807DDACC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FrontEnd", "FrontEnd", "{2CCDDB0F-0523-4D86-977B-5EF68C1E9D66}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration", "{F7486B40-DA80-4473-9529-58562AF42B8F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GateWay", "GateWay", "{FF9E5EEA-7898-4773-96C6-1C0FE5A3FDA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jpsstreet.Services.CouponApi", "Jpsstreet.Services.CouponApi\Jpsstreet.Services.CouponApi.csproj", "{110EBD53-72AB-4FAD-B01C-8DFED60D1FE7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{110EBD53-72AB-4FAD-B01C-8DFED60D1FE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{110EBD53-72AB-4FAD-B01C-8DFED60D1FE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{110EBD53-72AB-4FAD-B01C-8DFED60D1FE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{110EBD53-72AB-4FAD-B01C-8DFED60D1FE7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{110EBD53-72AB-4FAD-B01C-8DFED60D1FE7} = {5064D873-5CC4-486D-A13E-CC92807DDACC}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1D7F82F2-4573-42F6-B18E-9E8B9591B799}
+	EndGlobalSection
+EndGlobal
