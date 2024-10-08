@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace JpsStreetServices.CouponApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/coupon")]
     [ApiController]
     public class CouponApiController : ControllerBase
     {

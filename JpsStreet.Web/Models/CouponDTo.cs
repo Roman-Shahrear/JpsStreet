@@ -1,4 +1,4 @@
-﻿namespace Jpsstreet.Services.CouponApi.Models.DTo
+﻿namespace JpsStreet.Web.Models
 {
     public class CouponDTo
     {
