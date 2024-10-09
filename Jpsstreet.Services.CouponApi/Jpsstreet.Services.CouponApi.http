@@ -1,6 +1,3 @@
-@Jpsstreet.Services.CouponApi_HostAddress = http://localhost:5146
-
-GET {{Jpsstreet.Services.CouponApi_HostAddress}}/weatherforecast/
-Accept: application/json
+@JpsStreet.Services.CouponApi_HostAddress = http://localhost:5146
 
 ###

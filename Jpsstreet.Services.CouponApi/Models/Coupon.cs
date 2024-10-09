@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Jpsstreet.Services.CouponApi.Models
+namespace JpsStreet.Services.CouponApi.Models
 {
     public class Coupon
     {

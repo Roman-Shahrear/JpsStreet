@@ -2,10 +2,12 @@
 
 #nullable disable
 
-namespace Jpsstreet.Services.CouponApi.Migrations
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
+namespace JpsStreet.Services.CouponApi.Migrations
 {
     /// <inheritdoc />
-    public partial class AddCouponToDb : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,6 +25,15 @@ namespace Jpsstreet.Services.CouponApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Coupons", x => x.CouponId);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Coupons",
+                columns: new[] { "CouponId", "CouponCode", "DiscountAmount", "MinAmount" },
+                values: new object[,]
+                {
+                    { 1, "100ff", 10.0, 20 },
+                    { 2, "200ff", 20.0, 40 }
                 });
         }
 

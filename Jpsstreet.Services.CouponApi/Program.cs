@@ -1,6 +1,6 @@
 using AutoMapper;
-using Jpsstreet.Services.CouponApi;
-using Jpsstreet.Services.CouponApi.Data;
+using JpsStreet.Services.CouponApi;
+using JpsStreet.Services.CouponApi.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

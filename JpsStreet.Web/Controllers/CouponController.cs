@@ -2,7 +2,7 @@
 using JpsStreet.Web.Service.IService;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Collections.Generic;
+
 
 
 namespace JpsStreet.Web.Controllers
@@ -26,6 +26,26 @@ namespace JpsStreet.Web.Controllers
                 list = JsonConvert.DeserializeObject<List<CouponDTo>>(Convert.ToString(response.Result));
             }
             return View(list);
+        }
+
+        // Function for routing or tracking the path or take path control for create cooupn
+        public async Task<IActionResult> CreateCoupon()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateCouponCode(CouponDTo model)
+        {
+            if (ModelState.IsValid)
+            {
+                ResponseDTo? response = await _couponService.CreateCouponsAsync(model);
+
+                if (response != null && response.IsSuccess)
+                {
+                    return RedirectToAction(nameof(CouponIndex));
+                }
+            }
+            return View(model);
         }
     }
 }

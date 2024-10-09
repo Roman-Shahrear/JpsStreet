@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Jpsstreet.Services.CouponApi.Models;
-using Jpsstreet.Services.CouponApi.Models.DTo;
+using JpsStreet.Services.CouponApi.Models;
+using JpsStreet.Services.CouponApi.Models.DTo;
 
-namespace Jpsstreet.Services.CouponApi
+namespace JpsStreet.Services.CouponApi
 {
     public class MappingConfig
     {

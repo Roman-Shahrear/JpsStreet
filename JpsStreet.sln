@@ -11,9 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GateWay", "GateWay", "{FF9E5EEA-7898-4773-96C6-1C0FE5A3FDA0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jpsstreet.Services.CouponApi", "Jpsstreet.Services.CouponApi\Jpsstreet.Services.CouponApi.csproj", "{110EBD53-72AB-4FAD-B01C-8DFED60D1FE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JpsStreet.Services.CouponApi", "Jpsstreet.Services.CouponApi\JpsStreet.Services.CouponApi.csproj", "{110EBD53-72AB-4FAD-B01C-8DFED60D1FE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JpsStreet.Web", "JpsStreet.Web\JpsStreet.Web.csproj", "{D285AAF4-250D-4941-880D-8473E7334F4B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JpsStreet.Web", "JpsStreet.Web\JpsStreet.Web.csproj", "{D285AAF4-250D-4941-880D-8473E7334F4B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

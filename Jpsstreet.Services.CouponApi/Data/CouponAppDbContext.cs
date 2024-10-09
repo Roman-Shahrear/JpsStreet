@@ -1,7 +1,7 @@
-﻿using Jpsstreet.Services.CouponApi.Models;
+﻿using JpsStreet.Services.CouponApi.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Jpsstreet.Services.CouponApi.Data
+namespace JpsStreet.Services.CouponApi.Data
 {
     public class CouponAppDbContext : DbContext
     {

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Jpsstreet.Services.CouponApi.Data;
-using Jpsstreet.Services.CouponApi.Models.DTo;
-using Jpsstreet.Services.CouponApi.Models;
+using JpsStreet.Services.CouponApi.Data;
+using JpsStreet.Services.CouponApi.Models.DTo;
+using JpsStreet.Services.CouponApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
