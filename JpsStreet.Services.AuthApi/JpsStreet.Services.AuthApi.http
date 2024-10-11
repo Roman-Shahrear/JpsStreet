@@ -1,0 +1,6 @@
+@JpsStreet.Services.AuthApi_HostAddress = http://localhost:5139
+
+GET {{JpsStreet.Services.AuthApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
