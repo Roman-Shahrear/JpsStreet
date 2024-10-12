@@ -6,5 +6,6 @@ namespace JpsStreet.Services.AuthApi.Service.IService
     {
         Task<string> Register(RegistrationRequestDTo registrationRequestDTo);
         Task<LoginResponseDTo> Login(LoginRequestDTo loginRequestDTo);
+        Task<bool> AssaignRole(string email, string roleName);
     }
 }

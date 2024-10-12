@@ -1,4 +1,4 @@
-﻿namespace JpsStreet.Services.AuthApi.Models.DTo
+﻿namespace JpsStreet.Web.Models
 {
     public class RegistrationRequestDTo
     {

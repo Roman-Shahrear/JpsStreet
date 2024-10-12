@@ -1,5 +1,4 @@
 ﻿using JpsStreet.Services.AuthApi.Models.DTo;
-using JpsStreet.Services.AuthApi.Service;
 using JpsStreet.Services.AuthApi.Service.IService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,9 +32,30 @@ namespace JpsStreet.Services.AuthApi.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login()
+        public async Task<IActionResult> Login([FromBody] LoginRequestDTo model)
         {
-            return Ok();
+            var loginResponse = await _authService.Login(model);
+            if(loginResponse.User == null)
+            {
+                _response.IsSuccess = false;
+                _response.Message = "UserName or Password is incorrect";
+                return BadRequest(_response);
+            }
+            _response.Result = loginResponse;
+            return Ok(_response);
+        }
+
+        [HttpPost("assaignRole")]
+        public async Task<IActionResult> AssaignRole([FromBody] RegistrationRequestDTo model)
+        {
+            var assaignRoleSuccessful = await _authService.AssaignRole(model.Email,model.Role.ToUpper());
+            if (!assaignRoleSuccessful)
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Error encounter";
+                return BadRequest(_response);
+            }
+            return Ok(_response);
         }
     }
 }

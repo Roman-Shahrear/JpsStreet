@@ -22,7 +22,8 @@ builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSett
 builder.Services.AddIdentity<ApplicationUser,  IdentityRole>().AddEntityFrameworkStores<AuthAppDbContext>();
 
 builder.Services.AddControllers();
-
+// Inject JwtTokenGenerator
+builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 // Inject AuthService
 builder.Services.AddScoped<IAuthService, AuthService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
