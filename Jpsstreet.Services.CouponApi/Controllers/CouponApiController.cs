@@ -4,11 +4,13 @@ using JpsStreet.Services.CouponApi.Models.DTo;
 using JpsStreet.Services.CouponApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JpsStreetServices.CouponApi.Controllers
 {
     [Route("api/coupon")]
     [ApiController]
+    [Authorize]
     public class CouponApiController : ControllerBase
     {
         private readonly CouponAppDbContext _db;

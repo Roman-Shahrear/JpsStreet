@@ -1,4 +1,6 @@
-﻿namespace JpsStreet.Web.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace JpsStreet.Web.Models
 {
     public class LoginResponseDTo
     {

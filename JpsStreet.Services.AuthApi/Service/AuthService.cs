@@ -49,7 +49,8 @@ namespace JpsStreet.Services.AuthApi.Service
             }
 
             // If user is found, Generate Jwt Token
-            var token = _jwtTokenGenerator.GenerateToken(user);
+            var roles = await _userManager.GetRolesAsync(user);
+            var token = _jwtTokenGenerator.GenerateToken(user, roles);
 
             UserDTo userDTo = new()
             {

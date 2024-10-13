@@ -34,6 +34,7 @@ namespace JpsStreet.Web.Controllers
         }
 
         // Function for routing or tracking the path or take path control for create cooupn
+        [HttpGet]
         public async Task<IActionResult> CreateCoupon()
         {
             return View();
@@ -59,6 +60,7 @@ namespace JpsStreet.Web.Controllers
         }
 
         // Function for routing or tracking the path or take path control for single delete cooupn code and also need to deserialized for view in frontend
+        [HttpGet]
         public async Task<IActionResult> DeleteCoupon(int couponId)
         {
             ResponseDTo? response = await _couponService.GetCouponByIdAsync(couponId);

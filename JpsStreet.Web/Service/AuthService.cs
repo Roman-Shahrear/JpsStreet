@@ -28,7 +28,7 @@ namespace JpsStreet.Web.Service
                 ApiType = SD.ApiType.POST,
                 Data = loginRequestDTo,
                 Url = SD.AuthApiBase + "/api/auth/login"
-            });
+            },withBearer:false);
         }
 
         public async Task<ResponseDTo?> RegisterAsync(RegistrationRequestDTo registrationRequestDTo)
@@ -38,7 +38,7 @@ namespace JpsStreet.Web.Service
                 ApiType = SD.ApiType.POST,
                 Data = registrationRequestDTo,
                 Url = SD.AuthApiBase + "/api/auth/register"
-            });
+            },withBearer:false);
         }
     }
 }
