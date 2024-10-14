@@ -33,14 +33,14 @@ namespace JpsStreet.Web.Controllers
             return View(list);
         }
 
-        // Function for routing or tracking the path or take path control for create cooupn
+        // Function for routing or tracking the path or take path control for create coupon
         [HttpGet]
         public async Task<IActionResult> CreateCoupon()
         {
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CreateCouponCode(CouponDTo model)
+        public async Task<IActionResult> CreateCoupon(CouponDTo model)
         {
             if (ModelState.IsValid)
             {
@@ -79,7 +79,7 @@ namespace JpsStreet.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteCouponCode(CouponDTo couponDTo)
+        public async Task<IActionResult> DeleteCoupon(CouponDTo couponDTo)
         {
             ResponseDTo? response = await _couponService.DeleteCouponsAsync(couponDTo.CouponId);
 

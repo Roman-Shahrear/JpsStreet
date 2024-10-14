@@ -73,6 +73,7 @@ namespace JpsStreetServices.CouponApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDTo> CreateCouponCodeAsync([FromBody] CouponDTo couponDTo)
         {
             try
@@ -92,6 +93,7 @@ namespace JpsStreetServices.CouponApi.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDTo> UpdateCouponCodeAsync([FromBody] CouponDTo couponDTo)
         {
             try
@@ -111,6 +113,7 @@ namespace JpsStreetServices.CouponApi.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDTo> DeleteCouponCodeAsync(int id)
         {
             try
