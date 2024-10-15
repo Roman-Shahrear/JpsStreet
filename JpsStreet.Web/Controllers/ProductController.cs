@@ -7,24 +7,24 @@ using Newtonsoft.Json;
 
 namespace JpsStreet.Web.Controllers
 {
-    public class CouponController : Controller
+    public class ProductController : Controller
     {
-        private readonly ICouponService _couponService;
-        public CouponController(ICouponService couponService)
+        private readonly IProductService _ProductService;
+        public ProductController(IProductService ProductService)
         {
-            _couponService = couponService;
+            _ProductService = ProductService;
         }
 
         // For retreive data we need to get all data using deserialized from database to view in frontend all list data 
-        public async Task<IActionResult> CouponIndex()
+        public async Task<IActionResult> ProductIndex()
         {
-            List<CouponDTo>? list = new();
+            List<ProductDTo>? list = new();
 
-            ResponseDTo? response = await _couponService.GetAllCouponsAsync();
+            ResponseDTo? response = await _ProductService.GetAllProductsAsync();
 
             if (response != null && response.IsSuccess)
             {
-                list = JsonConvert.DeserializeObject<List<CouponDTo>>(Convert.ToString(response.Result));
+                list = JsonConvert.DeserializeObject<List<ProductDTo>>(Convert.ToString(response.Result));
             }
             else
             {
@@ -33,23 +33,23 @@ namespace JpsStreet.Web.Controllers
             return View(list);
         }
 
-        // Function for routing or tracking the path or take path control for create coupon
+        // Function for routing or tracking the path or take path control for create Product
         [HttpGet]
-        public async Task<IActionResult> CreateCoupon()
+        public async Task<IActionResult> CreateProduct()
         {
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CreateCoupon(CouponDTo model)
+        public async Task<IActionResult> CreateProduct(ProductDTo model)
         {
             if (ModelState.IsValid)
             {
-                ResponseDTo? response = await _couponService.CreateCouponsAsync(model);
+                ResponseDTo? response = await _ProductService.CreateProductsAsync(model);
 
                 if (response != null && response.IsSuccess)
                 {
-                    TempData["success"] = "Coupon created successfully";
-                    return RedirectToAction(nameof(CouponIndex));
+                    TempData["success"] = "Product created successfully";
+                    return RedirectToAction(nameof(ProductIndex));
                 }
                 else
                 {
@@ -61,13 +61,13 @@ namespace JpsStreet.Web.Controllers
 
         // Function for routing or tracking the path or take path control for single delete cooupn code and also need to deserialized for view in frontend
         [HttpGet]
-        public async Task<IActionResult> DeleteCoupon(int couponId)
+        public async Task<IActionResult> DeleteProduct(int productId)
         {
-            ResponseDTo? response = await _couponService.GetCouponByIdAsync(couponId);
+            ResponseDTo? response = await _ProductService.GetProductByIdAsync(productId);
 
             if (response != null && response.IsSuccess)
             {
-                CouponDTo? model = JsonConvert.DeserializeObject<CouponDTo>(Convert.ToString(response.Result));
+                ProductDTo? model = JsonConvert.DeserializeObject<ProductDTo>(Convert.ToString(response.Result));
                 return View(model);
             }
             else
@@ -75,24 +75,24 @@ namespace JpsStreet.Web.Controllers
                 TempData["error"] = response?.Message;
             }
             return NotFound();
-
+            
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteCoupon(CouponDTo couponDTo)
+        public async Task<IActionResult> DeleteProduct(ProductDTo productDTo)
         {
-            ResponseDTo? response = await _couponService.DeleteCouponsAsync(couponDTo.CouponId);
+            ResponseDTo? response = await _ProductService.DeleteProductsAsync(productDTo.ProductId);
 
             if (response != null && response.IsSuccess)
             {
-                TempData["success"] = "Coupon deleted successfully";
-                return RedirectToAction(nameof(CouponIndex));
+                TempData["success"] = "Product deleted successfully";
+                return RedirectToAction(nameof(ProductIndex));
             }
             else
             {
                 TempData["error"] = response?.Message;
             }
-            return View(couponDTo);
+            return View(productDTo);
         }
     }
 }
