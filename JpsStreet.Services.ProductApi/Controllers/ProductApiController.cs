@@ -10,7 +10,7 @@ namespace JpsStreet.Services.ProductApi.Controllers
 {
     [Route("api/product")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ProductApiController : Controller
     {
         private readonly ProductAppDbContext _db;
@@ -57,15 +57,43 @@ namespace JpsStreet.Services.ProductApi.Controllers
 
         [HttpPost]
         [Authorize(Roles = "ADMIN")]
-        public async Task<ResponseDTo> CreateCouponCodeAsync([FromBody] ProductDTo productDTo)
+        public async Task<ResponseDTo> CreateProduct([FromBody] ProductDTo productDTo)
         {
             try
             {
-                Product obj = _mapper.Map<Product>(productDTo);
-                await _db.Products.AddAsync(obj);
+                Product product = _mapper.Map<Product>(productDTo);
+                await _db.Products.AddAsync(product);
                 await _db.SaveChangesAsync();
 
-                _response.Result = _mapper.Map<ProductDTo>(obj);
+                if(productDTo.Image != null)
+                {
+                    string fileName = product.ProductId + Path.GetExtension(productDTo.Image.FileName);
+                    string filePath = @"wwwroot\ProductImages\" + fileName;
+
+                    // Remove the image with same name if that is exist
+                    var directoryLocation = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+                    FileInfo file = new FileInfo(directoryLocation);
+                    if (file.Exists)
+                    {
+                        file.Delete();
+                    }
+
+                    var filePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+                    using (var fileStream  = new FileStream(filePathDirectory, FileMode.Create))
+                    {
+                        productDTo.Image.CopyTo(fileStream);
+                    }
+                    var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
+                    product.ImageUrl = baseUrl+ "/ProductImages/"+ fileName;
+                    product.ImageLocalPath = filePath;
+                }
+                else
+                {
+                    product.ImageUrl = "https://placehold.co/600x400";
+                }
+                _db.Products.Update(product);
+                _db.SaveChanges();
+                _response.Result = _mapper.Map<ProductDTo>(product);
             }
             catch (Exception ex)
             {
@@ -77,15 +105,41 @@ namespace JpsStreet.Services.ProductApi.Controllers
 
         [HttpPut]
         [Authorize(Roles = "ADMIN")]
-        public async Task<ResponseDTo> UpdateCouponCodeAsync([FromBody] ProductDTo productDTo)
+        public async Task<ResponseDTo> UpdateProductAsync([FromBody] ProductDTo productDTo)
         {
             try
             {
-                Product obj = _mapper.Map<Product>(productDTo);
-                _db.Products.Update(obj);
-                await _db.SaveChangesAsync();
+                Product product = _mapper.Map<Product>(productDTo);
 
-                _response.Result = _mapper.Map<ProductDTo>(obj);
+                if (productDTo.Image != null)
+                {
+                    if (!string.IsNullOrEmpty(product.ImageLocalPath))
+                    {
+                        var oldFilePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), product.ImageLocalPath);
+                        FileInfo file = new FileInfo(oldFilePathDirectory);
+                        if (file.Exists)
+                        {
+                            file.Delete();
+                        }
+                    }
+
+                    string fileName = product.ProductId + Path.GetExtension(productDTo.Image.FileName);
+                    string filePath = @"wwwroot\ProductImages\" + fileName;
+                    var filePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+                    using (var fileStream = new FileStream(filePathDirectory, FileMode.Create))
+                    {
+                        productDTo.Image.CopyTo(fileStream);
+                    }
+                    var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
+                    product.ImageUrl = baseUrl + "/ProductImages/" + fileName;
+                    product.ImageLocalPath = filePath;
+                }
+
+
+                _db.Products.Update(product);
+                _db.SaveChanges();
+
+                _response.Result = _mapper.Map<ProductDTo>(product);
             }
             catch (Exception ex)
             {
@@ -97,11 +151,20 @@ namespace JpsStreet.Services.ProductApi.Controllers
 
         [HttpDelete("{id:int}")]
         [Authorize(Roles = "ADMIN")]
-        public async Task<ResponseDTo> DeleteCouponCodeAsync(int id)
+        public async Task<ResponseDTo> DeleteProductAsync(int id)
         {
             try
             {
                 Product obj = await _db.Products.FirstAsync(u => u.ProductId == id);
+                if (!string.IsNullOrEmpty(obj.ImageLocalPath))
+                {
+                    var oldFilePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), obj.ImageLocalPath);
+                    FileInfo file = new FileInfo(oldFilePathDirectory);
+                    if (file.Exists)
+                    {
+                        file.Delete();
+                    }
+                }
                 _db.Products.Remove(obj);
                 await _db.SaveChangesAsync();
             }

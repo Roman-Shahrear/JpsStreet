@@ -94,5 +94,41 @@ namespace JpsStreet.Web.Controllers
             }
             return View(productDTo);
         }
+
+        // Function for routing or tracking the path or take path control for single Edit Product and also need to deserialized for view in frontend
+        [HttpGet]
+        public async Task<IActionResult> EditProduct(int productId)
+        {
+            ResponseDTo? response = await _ProductService.GetProductByIdAsync(productId);
+
+            if (response != null && response.IsSuccess)
+            {
+                ProductDTo? model = JsonConvert.DeserializeObject<ProductDTo>(Convert.ToString(response.Result));
+                return View(model);
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
+            return NotFound();
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditProduct(ProductDTo productDTo)
+        {
+            ResponseDTo? response = await _ProductService.UpdateProductsAsync(productDTo);
+
+            if (response != null && response.IsSuccess)
+            {
+                TempData["success"] = "Product updated successfully";
+                return RedirectToAction(nameof(ProductIndex));
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
+            return View(productDTo);
+        }
     }
 }

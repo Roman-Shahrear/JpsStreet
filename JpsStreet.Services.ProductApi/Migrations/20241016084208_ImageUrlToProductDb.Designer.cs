@@ -3,6 +3,7 @@ using JpsStreet.Services.ProductApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JpsStreet.Services.ProductApi.Migrations
 {
     [DbContext(typeof(ProductAppDbContext))]
-    partial class ProductAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241016084208_ImageUrlToProductDb")]
+    partial class ImageUrlToProductDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
