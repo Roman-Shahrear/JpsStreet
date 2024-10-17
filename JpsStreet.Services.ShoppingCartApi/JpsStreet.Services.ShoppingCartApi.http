@@ -1,0 +1,6 @@
+@JpsStreet.Services.ShoppingCartApi_HostAddress = http://localhost:5260
+
+GET {{JpsStreet.Services.ShoppingCartApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
