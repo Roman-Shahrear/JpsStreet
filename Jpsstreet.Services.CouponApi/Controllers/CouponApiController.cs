@@ -56,7 +56,7 @@ namespace JpsStreetServices.CouponApi.Controllers
             return _response;
         }
 
-        [HttpGet("GetByCode/{code}")]
+        [HttpGet("getByCode/{code}")]
         public async Task<ResponseDTo> GetByCodeAsync(string code)
         {
             try

@@ -3,10 +3,8 @@ using JpsStreet.Services.ShoppingCartApi.Data;
 using JpsStreet.Services.ShoppingCartApi.Models;
 using JpsStreet.Services.ShoppingCartApi.Models.DTo;
 using JpsStreet.Services.ShoppingCartApi.Service.IService;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.PortableExecutable;
 
 namespace JpsStreet.Services.ShoppingCartApi.Controllers
 {
@@ -18,13 +16,16 @@ namespace JpsStreet.Services.ShoppingCartApi.Controllers
         private ResponseDTo _response;
         private IMapper _mapper;
         private IProductService _productService;
+        private ICouponService _couponService;
 
-        public ShoppingCartApiController(ShoppingCartAppDbContext db, IMapper mapper, IProductService productService)
+        public ShoppingCartApiController(ShoppingCartAppDbContext db, IMapper mapper, IProductService productService, ICouponService couponService)
         {
             _db = db;
             _productService = productService;
+            _couponService = couponService;
             _response = new ResponseDTo();
             _mapper = mapper;
+            _couponService = couponService;
         }
 
         [HttpGet("getCart/{userId}")]
@@ -44,6 +45,17 @@ namespace JpsStreet.Services.ShoppingCartApi.Controllers
                     cart.CartHeader.CartTotal += (item.Count * item.Product.Price);
                 }
 
+                // apply coupon if any
+                if (!string.IsNullOrEmpty(cart.CartHeader.CouponCode))
+                {
+                    CouponDTo coupon = await _couponService.GetCoupon(cart.CartHeader.CouponCode);
+                    if(coupon!=null && cart.CartHeader.CartTotal > coupon.MinAmount)
+                    {
+                        cart.CartHeader.CartTotal -= coupon.DiscountAmount;
+                        cart.CartHeader.Discount = coupon.DiscountAmount;
+                    }
+                }
+
                 _response.Result = cart;
             }
             catch (Exception ex)
@@ -53,6 +65,26 @@ namespace JpsStreet.Services.ShoppingCartApi.Controllers
             }
             return _response;
         }
+
+        [HttpPost("applyCoupon")]
+        public async Task<object> ApplyCoupon([FromBody] CartDTo cartDTo)
+        {
+            try
+            {
+                var cartFromDb = await _db.CartHeaders.FirstAsync(u => u.UserId == cartDTo.CartHeader.UserId);
+                cartFromDb.CouponCode = cartDTo.CartHeader.CouponCode;
+                _db.CartHeaders.Update(cartFromDb);
+                await _db.SaveChangesAsync();
+                _response.Result = true;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.ToString();
+            }
+            return _response;
+        }
+
 
         [HttpPost("cartUpsert")]
         public async Task<ResponseDTo> CartUpsert(CartDTo cartDTo)
