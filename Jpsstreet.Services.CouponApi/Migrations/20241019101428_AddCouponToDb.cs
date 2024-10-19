@@ -7,7 +7,7 @@
 namespace JpsStreet.Services.CouponApi.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class AddCouponToDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,8 +32,8 @@ namespace JpsStreet.Services.CouponApi.Migrations
                 columns: new[] { "CouponId", "CouponCode", "DiscountAmount", "MinAmount" },
                 values: new object[,]
                 {
-                    { 1, "100ff", 10.0, 20 },
-                    { 2, "200ff", 20.0, 40 }
+                    { 1, "10OFF", 10.0, 20 },
+                    { 2, "20OFF", 20.0, 40 }
                 });
         }
 

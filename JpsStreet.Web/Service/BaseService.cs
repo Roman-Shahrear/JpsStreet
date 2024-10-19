@@ -42,14 +42,21 @@ namespace JpsStreet.Web.Service
 
                 HttpResponseMessage? apiResponse = null;
 
-                message.Method = requestDto.ApiType switch
+                switch (requestDto.ApiType)
                 {
-                    // switch case to convert in expression
-                    ApiType.POST => HttpMethod.Post,
-                    ApiType.DELETE => HttpMethod.Delete,
-                    ApiType.PUT => HttpMethod.Put,
-                    _ => HttpMethod.Get,
-                };
+                    case ApiType.POST:
+                        message.Method = HttpMethod.Post;
+                        break;
+                    case ApiType.DELETE:
+                        message.Method = HttpMethod.Delete;
+                        break;
+                    case ApiType.PUT:
+                        message.Method = HttpMethod.Put;
+                        break;
+                    default:
+                        message.Method = HttpMethod.Get;
+                        break;
+                }
 
                 apiResponse = await client.SendAsync(message);
 

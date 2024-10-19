@@ -47,14 +47,14 @@ namespace JpsStreet.Services.CouponApi.Migrations
                         new
                         {
                             CouponId = 1,
-                            CouponCode = "100ff",
+                            CouponCode = "10OFF",
                             DiscountAmount = 10.0,
                             MinAmount = 20
                         },
                         new
                         {
                             CouponId = 2,
-                            CouponCode = "200ff",
+                            CouponCode = "20OFF",
                             DiscountAmount = 20.0,
                             MinAmount = 40
                         });

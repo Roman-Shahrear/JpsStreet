@@ -37,19 +37,22 @@ namespace JpsStreet.Services.ShoppingCartApi.Controllers
                 {
                     CartHeader = _mapper.Map<CartHeaderDTo>(_db.CartHeaders.First(u => u.UserId == userId))
                 };
-                cart.CartDetails = _mapper.Map<IEnumerable<CartDetailsDTo>>(_db.CartDetails.Where(u => u.CartHeaderId == cart.CartHeader.CartHeaderId));
-                IEnumerable<ProductDTo> productDTos = await _productService.GetProducts();
-                foreach(var item in cart.CartDetails)
+                cart.CartDetails = _mapper.Map<IEnumerable<CartDetailsDTo>>(_db.CartDetails
+                    .Where(u => u.CartHeaderId == cart.CartHeader.CartHeaderId));
+
+                IEnumerable<ProductDTo> productDtos = await _productService.GetProducts();
+
+                foreach (var item in cart.CartDetails)
                 {
-                    item.Product = productDTos.FirstOrDefault(u => u.ProductId == item.ProductId);
+                    item.Product = productDtos.FirstOrDefault(u => u.ProductId == item.ProductId);
                     cart.CartHeader.CartTotal += (item.Count * item.Product.Price);
                 }
-
-                // apply coupon if any
+                Console.WriteLine($"Coupon applied: Discount={cart.CartHeader.Discount}, New Total={cart.CartHeader.CartTotal}");
+                //apply coupon if any
                 if (!string.IsNullOrEmpty(cart.CartHeader.CouponCode))
                 {
                     CouponDTo coupon = await _couponService.GetCoupon(cart.CartHeader.CouponCode);
-                    if(coupon!=null && cart.CartHeader.CartTotal > coupon.MinAmount)
+                    if (coupon != null && cart.CartHeader.CartTotal > coupon.MinAmount)
                     {
                         cart.CartHeader.CartTotal -= coupon.DiscountAmount;
                         cart.CartHeader.Discount = coupon.DiscountAmount;
@@ -67,12 +70,12 @@ namespace JpsStreet.Services.ShoppingCartApi.Controllers
         }
 
         [HttpPost("applyCoupon")]
-        public async Task<object> ApplyCoupon([FromBody] CartDTo cartDTo)
+        public async Task<object> ApplyCoupon([FromBody] CartDTo cartDto)
         {
             try
             {
-                var cartFromDb = await _db.CartHeaders.FirstAsync(u => u.UserId == cartDTo.CartHeader.UserId);
-                cartFromDb.CouponCode = cartDTo.CartHeader.CouponCode;
+                var cartFromDb = await _db.CartHeaders.FirstAsync(u => u.UserId == cartDto.CartHeader.UserId);
+                cartFromDb.CouponCode = cartDto.CartHeader.CouponCode;
                 _db.CartHeaders.Update(cartFromDb);
                 await _db.SaveChangesAsync();
                 _response.Result = true;
@@ -84,6 +87,7 @@ namespace JpsStreet.Services.ShoppingCartApi.Controllers
             }
             return _response;
         }
+
 
 
         [HttpPost("cartUpsert")]
@@ -106,7 +110,7 @@ namespace JpsStreet.Services.ShoppingCartApi.Controllers
                 {
                     // if header is not null
                     // check if details has same product
-                    var cartDetailsFromDb = await _db.CartDetails.FirstOrDefaultAsync(
+                    var cartDetailsFromDb = await _db.CartDetails.AsNoTracking().FirstOrDefaultAsync(
                         u => u.ProductId == cartDTo.CartDetails.First().ProductId &&
                         u.CartHeaderId == cartHeaderFromDb.CartHeaderId);
                     if(cartDetailsFromDb == null)

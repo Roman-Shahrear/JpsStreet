@@ -4,6 +4,7 @@ using JpsStreet.Services.ShoppingCartApi.Data;
 using JpsStreet.Services.ShoppingCartApi.Extensions;
 using JpsStreet.Services.ShoppingCartApi.Service;
 using JpsStreet.Services.ShoppingCartApi.Service.IService;
+using JpsStreet.Services.ShoppingCartApi.Utility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -21,11 +22,22 @@ IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
 // Finally Use Auto mapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
+// Register Services
 builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddHttpClient("Product", u => u.BaseAddress = new Uri(builder.Configuration["ServiceUrls:ProductApiBase"]));
 builder.Services.AddScoped<ICouponService, CouponService>();
-builder.Services.AddHttpClient("Coupon", u => u.BaseAddress = new Uri(builder.Configuration["ServiceUrls:CouponApiBase"]));
+builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
+
+// Register Client Services
+builder.Services.AddHttpClient("Product", u =>
+    u.BaseAddress = new Uri(builder.Configuration["ServiceUrls:ProductApiBase"]))
+    .AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
+builder.Services.AddHttpClient("Coupon", u =>
+    u.BaseAddress = new Uri(builder.Configuration["ServiceUrls:CouponApiBase"]))
+    .AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
+
+//Register HttpContextAccessor
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

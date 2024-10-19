@@ -18,7 +18,7 @@ namespace JpsStreet.Services.ShoppingCartApi.Service
             var response = await client.GetAsync($"/api/coupon/getByCode/{couponCode}");
             var apiContent = await response.Content.ReadAsStringAsync();
             var resProduct = JsonConvert.DeserializeObject<ResponseDTo>(apiContent);
-            if (resProduct.IsSuccess)
+            if (resProduct != null && resProduct.IsSuccess)
             {
                 return JsonConvert.DeserializeObject<CouponDTo>(Convert.ToString(resProduct.Result));
             }

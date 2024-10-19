@@ -18,13 +18,13 @@ namespace JpsStreet.Services.CouponApi.Data
             modelBuilder.Entity<Coupon>().HasData(
             new Coupon {
                 CouponId = 1,
-                CouponCode = "100ff",
+                CouponCode = "10OFF",
                 DiscountAmount = 10,
                 MinAmount = 20,
             },
             new Coupon {
                  CouponId = 2,
-                 CouponCode = "200ff",
+                 CouponCode = "20OFF",
                  DiscountAmount = 20,
                  MinAmount = 40
             });

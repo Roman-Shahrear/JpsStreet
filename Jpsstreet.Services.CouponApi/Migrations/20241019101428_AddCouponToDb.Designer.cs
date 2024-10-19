@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JpsStreet.Services.CouponApi.Migrations
 {
     [DbContext(typeof(CouponAppDbContext))]
-    [Migration("20241008175239_initial")]
-    partial class initial
+    [Migration("20241019101428_AddCouponToDb")]
+    partial class AddCouponToDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,14 +50,14 @@ namespace JpsStreet.Services.CouponApi.Migrations
                         new
                         {
                             CouponId = 1,
-                            CouponCode = "100ff",
+                            CouponCode = "10OFF",
                             DiscountAmount = 10.0,
                             MinAmount = 20
                         },
                         new
                         {
                             CouponId = 2,
-                            CouponCode = "200ff",
+                            CouponCode = "20OFF",
                             DiscountAmount = 20.0,
                             MinAmount = 40
                         });

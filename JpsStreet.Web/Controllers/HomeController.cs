@@ -1,3 +1,4 @@
+using IdentityModel;
 using JpsStreet.Web.Models;
 using JpsStreet.Web.Service.IService;
 using Microsoft.AspNetCore.Authorization;
@@ -10,10 +11,11 @@ namespace JpsStreet.Web.Controllers
     public class HomeController : Controller
     {
         private readonly IProductService _productService;
-
-        public HomeController(IProductService productService)
+        private readonly IShoppingCartService _shoppingCartService;
+        public HomeController(IProductService productService, IShoppingCartService shoppingCartService)
         {
             _productService = productService;
+            _shoppingCartService = shoppingCartService;
         }
 
         public async Task<IActionResult> Index()
@@ -49,6 +51,44 @@ namespace JpsStreet.Web.Controllers
             }
 
             return View(model);
+        }
+
+
+        [Authorize]
+        [HttpPost]
+        [ActionName("ProductDetails")]
+        public async Task<IActionResult> ProductDetails(ProductDTo productDto)
+        {
+            CartDTo cartDto = new CartDTo()
+            {
+                CartHeader = new CartHeaderDTo
+                {
+                    UserId = User.Claims.Where(u => u.Type == JwtClaimTypes.Subject)?.FirstOrDefault()?.Value
+                }
+            };
+
+            CartDetailsDTo cartDetails = new CartDetailsDTo()
+            {
+                Count = productDto.Count,
+                ProductId = productDto.ProductId,
+            };
+
+            List<CartDetailsDTo> cartDetailsDtos = new() { cartDetails };
+            cartDto.CartDetails = cartDetailsDtos;
+
+            ResponseDTo? response = await _shoppingCartService.UpsertShoppingCartAsync(cartDto);
+
+            if (response != null && response.IsSuccess)
+            {
+                TempData["success"] = "Item has been added to the Shopping Cart";
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
+
+            return View(productDto);
         }
 
         public IActionResult Privacy()
