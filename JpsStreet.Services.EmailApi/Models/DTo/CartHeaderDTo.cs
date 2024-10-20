@@ -1,4 +1,4 @@
-﻿namespace JpsStreet.Web.Models
+﻿namespace JpsStreet.Services.EmailApi.Models.DTo
 {
     public class CartHeaderDTo
     {

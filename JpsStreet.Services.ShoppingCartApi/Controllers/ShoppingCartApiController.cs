@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using JpsStreet.Message.RabbiMQ;
 using JpsStreet.Services.ShoppingCartApi.Data;
 using JpsStreet.Services.ShoppingCartApi.Models;
 using JpsStreet.Services.ShoppingCartApi.Models.DTo;
@@ -17,8 +18,14 @@ namespace JpsStreet.Services.ShoppingCartApi.Controllers
         private IMapper _mapper;
         private IProductService _productService;
         private ICouponService _couponService;
+        private IConfiguration _configuration;
+        private readonly IMessageRabbitMQ _messageRabbitMQ;
 
-        public ShoppingCartApiController(ShoppingCartAppDbContext db, IMapper mapper, IProductService productService, ICouponService couponService)
+        public ShoppingCartApiController(ShoppingCartAppDbContext db,
+            IMapper mapper, IProductService productService,
+            ICouponService couponService,
+            IConfiguration configuration,
+            IMessageRabbitMQ messageRabbitMQ)
         {
             _db = db;
             _productService = productService;
@@ -26,6 +33,8 @@ namespace JpsStreet.Services.ShoppingCartApi.Controllers
             _response = new ResponseDTo();
             _mapper = mapper;
             _couponService = couponService;
+            _configuration = configuration;
+            _messageRabbitMQ = messageRabbitMQ;
         }
 
         [HttpGet("getCart/{userId}")]
@@ -88,6 +97,22 @@ namespace JpsStreet.Services.ShoppingCartApi.Controllers
             return _response;
         }
 
+
+        [HttpPost("emailCartRequest")]
+        public async Task<object> EmailCartRequest([FromBody] CartDTo cartDto)
+        {
+            try
+            {
+                await _messageRabbitMQ.PublishMessage(cartDto, _configuration.GetValue<string>("TopicAndQueueNames:EmailShoppingCart"));
+                _response.Result = true;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.ToString();
+            }
+            return _response;
+        }
 
 
         [HttpPost("cartUpsert")]

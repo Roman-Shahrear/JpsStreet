@@ -1,0 +1,6 @@
+@JpsStreet.Services.EmailApi_HostAddress = http://localhost:5238
+
+GET {{JpsStreet.Services.EmailApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

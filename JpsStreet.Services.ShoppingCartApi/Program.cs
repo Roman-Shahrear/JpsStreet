@@ -1,4 +1,5 @@
 using AutoMapper;
+using JpsStreet.Message.RabbiMQ;
 using JpsStreet.Services.ShoppingCartApi;
 using JpsStreet.Services.ShoppingCartApi.Data;
 using JpsStreet.Services.ShoppingCartApi.Extensions;
@@ -26,6 +27,8 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
+// Register RabbitMQ
+builder.Services.AddScoped<IMessageRabbitMQ, MessageRabbitMQ>();
 
 // Register Client Services
 builder.Services.AddHttpClient("Product", u =>

@@ -17,12 +17,11 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
-	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JpsStreet.Message.RabbiMQ\JpsStreet.Message.RabbiMQ.csproj" />
+    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>

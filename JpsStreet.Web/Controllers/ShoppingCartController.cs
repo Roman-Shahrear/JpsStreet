@@ -56,6 +56,19 @@ namespace JpsStreet.Web.Controllers
             return RedirectToAction(nameof(CartIndex));
         }
 
+        [HttpPost]
+        public async Task<IActionResult> EmailCart(CartDTo cartDto)
+        {
+            CartDTo cart = await LoadCartDToBasedOnLoggedInUser();
+            cart.CartHeader.Email = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Email)?.FirstOrDefault()?.Value;
+            ResponseDTo? response = await _shoppingCartService.EmailCart(cart);
+            if (response != null & response.IsSuccess)
+            {
+                TempData["success"] = "Email will be processed and sent shortly.";
+                return RedirectToAction(nameof(CartIndex));
+            }
+            return View();
+        }
 
         [HttpPost]
         public async Task<IActionResult> RemoveCoupon(CartDTo cartDto)

@@ -22,6 +22,16 @@ namespace JpsStreet.Web.Service
             });
         }
 
+        public async Task<ResponseDTo?> EmailCart(CartDTo cartDTo)
+        {
+            return await _baseService.SendAsync(new RequestDTo()
+            {
+                ApiType = SD.ApiType.POST,
+                Data = cartDTo,
+                Url = SD.ShoppingCartApiBase + "/api/cart/emailCartRequest"
+            });
+        }
+
         public async Task<ResponseDTo?> GetShoppingCartByUserIDAsync(string userId)
         {
             return await _baseService.SendAsync(new RequestDTo()

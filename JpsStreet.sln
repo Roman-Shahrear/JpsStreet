@@ -19,7 +19,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JpsStreet.Services.AuthApi"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JpsStreet.Services.ProductApi", "JpsStreet.Services.ProductApi\JpsStreet.Services.ProductApi.csproj", "{6A4C1C81-EF0F-48FD-BE75-64E84683DF4B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JpsStreet.Services.ShoppingCartApi", "JpsStreet.Services.ShoppingCartApi\JpsStreet.Services.ShoppingCartApi.csproj", "{ECDDD365-5F70-464F-93AE-1ACACD38C56F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JpsStreet.Services.ShoppingCartApi", "JpsStreet.Services.ShoppingCartApi\JpsStreet.Services.ShoppingCartApi.csproj", "{ECDDD365-5F70-464F-93AE-1ACACD38C56F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JpsStreet.Message.RabbiMQ", "JpsStreet.Message.RabbiMQ\JpsStreet.Message.RabbiMQ.csproj", "{0C93B580-099B-405A-BC26-7CF2031601D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JpsStreet.Services.EmailApi", "JpsStreet.Services.EmailApi\JpsStreet.Services.EmailApi.csproj", "{698B5D91-32D5-4A98-A28A-8DF2A621B01D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +51,14 @@ Global
 		{ECDDD365-5F70-464F-93AE-1ACACD38C56F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECDDD365-5F70-464F-93AE-1ACACD38C56F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECDDD365-5F70-464F-93AE-1ACACD38C56F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C93B580-099B-405A-BC26-7CF2031601D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C93B580-099B-405A-BC26-7CF2031601D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C93B580-099B-405A-BC26-7CF2031601D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C93B580-099B-405A-BC26-7CF2031601D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{698B5D91-32D5-4A98-A28A-8DF2A621B01D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{698B5D91-32D5-4A98-A28A-8DF2A621B01D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{698B5D91-32D5-4A98-A28A-8DF2A621B01D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{698B5D91-32D5-4A98-A28A-8DF2A621B01D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -57,6 +69,8 @@ Global
 		{7B29907D-7143-4BD4-A904-AFDAD63BAB3F} = {5064D873-5CC4-486D-A13E-CC92807DDACC}
 		{6A4C1C81-EF0F-48FD-BE75-64E84683DF4B} = {5064D873-5CC4-486D-A13E-CC92807DDACC}
 		{ECDDD365-5F70-464F-93AE-1ACACD38C56F} = {5064D873-5CC4-486D-A13E-CC92807DDACC}
+		{0C93B580-099B-405A-BC26-7CF2031601D7} = {F7486B40-DA80-4473-9529-58562AF42B8F}
+		{698B5D91-32D5-4A98-A28A-8DF2A621B01D} = {5064D873-5CC4-486D-A13E-CC92807DDACC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1D7F82F2-4573-42F6-B18E-9E8B9591B799}

@@ -8,6 +8,6 @@ namespace JpsStreet.Web.Service.IService
         Task<ResponseDTo?> UpsertShoppingCartAsync(CartDTo cartDTo);
         Task<ResponseDTo?> RemoveFromShoppingCartAsync(int cartDetailsId);
         Task<ResponseDTo?> ApplyCouponAsync(CartDTo cartDTo);
-        
+        Task<ResponseDTo?> EmailCart(CartDTo cartDTo);
     }
 }
