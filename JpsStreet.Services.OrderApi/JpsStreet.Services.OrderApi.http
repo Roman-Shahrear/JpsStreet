@@ -1,0 +1,6 @@
+@JpsStreet.Services.OrderApi_HostAddress = http://localhost:5038
+
+GET {{JpsStreet.Services.OrderApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

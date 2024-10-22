@@ -1,4 +1,4 @@
-﻿using JpsStreet.Services.ShoppingCartApi.Models.DTo;
+﻿using JpsStreet.Services.OrderApi.Models.DTo;
 
 namespace JpsStreet.Services.ShoppingCartApi.Service.IService
 {

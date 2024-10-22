@@ -1,4 +1,4 @@
-﻿namespace JpsStreet.Services.ShoppingCartApi.Models.DTo
+﻿namespace JpsStreet.Services.OrderApi.Models.DTo
 {
     public class CartDetailsDTo
     {
