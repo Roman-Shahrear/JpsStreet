@@ -97,6 +97,58 @@ namespace JpsStreet.Services.ShoppingCartApi.Controllers
             return _response;
         }
 
+        //[HttpPost("applyCoupon")]
+        //public async Task<object> ApplyCoupon([FromBody] CartDTo cartDto)
+        //{
+        //    try
+        //    {
+        //        // Retrieve the cart header from the database
+        //        var cartFromDb = await _db.CartHeaders.FirstOrDefaultAsync(u => u.UserId == cartDto.CartHeader.UserId);
+
+        //        // Check if the cart exists
+        //        if (cartFromDb == null)
+        //        {
+        //            _response.IsSuccess = false;
+        //            _response.Message = "Cart not found for the given user.";
+        //            return _response;
+        //        }
+
+        //        // Retrieve the coupon using the provided coupon code
+        //        var coupon = await _db.Coupons.FirstOrDefaultAsync(c => c.CouponCode == cartDto.CartHeader.CouponCode);
+
+        //        // Validate the coupon
+        //        if (coupon == null)
+        //        {
+        //            _response.IsSuccess = false;
+        //            _response.Message = "Invalid coupon code.";
+        //            return _response;
+        //        }
+
+        //        // Check if the cart total meets the minimum amount for the coupon
+        //        if (cartFromDb.CartTotal < coupon.MinAmount)
+        //        {
+        //            _response.IsSuccess = false;
+        //            _response.Message = "Cart total does not meet the minimum amount for this coupon.";
+        //            return _response;
+        //        }
+
+        //        // Apply the coupon code
+        //        cartFromDb.CouponCode = coupon.CouponCode;
+        //        _db.CartHeaders.Update(cartFromDb);
+        //        await _db.SaveChangesAsync();
+
+        //        _response.Result = true;
+        //        return _response;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _response.IsSuccess = false;
+        //        _response.Message = ex.ToString();
+        //        return _response;
+        //    }
+        //}
+
+
 
         [HttpPost("emailCartRequest")]
         public async Task<object> EmailCartRequest([FromBody] CartDTo cartDto)

@@ -5,7 +5,7 @@
 namespace JpsStreet.Services.ShoppingCartApi.Migrations
 {
     /// <inheritdoc />
-    public partial class AddShoppingCartTables : Migration
+    public partial class AddCartTableToDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -31,7 +31,7 @@ namespace JpsStreet.Services.ShoppingCartApi.Migrations
                     CartDetailsId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CartHeaderId = table.Column<int>(type: "int", nullable: false),
-                    productId = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
                     Count = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

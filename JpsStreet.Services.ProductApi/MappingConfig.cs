@@ -11,7 +11,6 @@ namespace JpsStreet.Services.ProductApi
             var mappingConfig = new MapperConfiguration(config =>
             {
                 config.CreateMap<ProductDTo, Product>().ReverseMap();
-                //config.CreateMap<Product, ProductDTo>();
             });
 
             return mappingConfig;

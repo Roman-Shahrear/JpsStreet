@@ -10,7 +10,6 @@ namespace JpsStreet.Services.ProductApi.Controllers
 {
     [Route("api/product")]
     [ApiController]
-    //[Authorize]
     public class ProductApiController : Controller
     {
         private readonly ProductAppDbContext _db;

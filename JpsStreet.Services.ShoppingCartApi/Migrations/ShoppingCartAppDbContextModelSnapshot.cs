@@ -35,7 +35,7 @@ namespace JpsStreet.Services.ShoppingCartApi.Migrations
                     b.Property<int>("Count")
                         .HasColumnType("int");
 
-                    b.Property<int>("productId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.HasKey("CartDetailsId");

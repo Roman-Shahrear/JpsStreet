@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JpsStreet.Services.ShoppingCartApi.Migrations
 {
     [DbContext(typeof(ShoppingCartAppDbContext))]
-    [Migration("20241017083807_AddShoppingCartTables")]
-    partial class AddShoppingCartTables
+    [Migration("20241023173649_AddCartTableToDb")]
+    partial class AddCartTableToDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,7 +38,7 @@ namespace JpsStreet.Services.ShoppingCartApi.Migrations
                     b.Property<int>("Count")
                         .HasColumnType("int");
 
-                    b.Property<int>("productId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.HasKey("CartDetailsId");

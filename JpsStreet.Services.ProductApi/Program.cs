@@ -66,10 +66,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
-ApplyMigration();
 app.MapControllers();
-
+ApplyMigration();
 app.Run();
 
 

@@ -75,13 +75,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+Stripe.StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-ApplyMigration();
 app.MapControllers();
-
+ApplyMigration();
 app.Run();
 
 

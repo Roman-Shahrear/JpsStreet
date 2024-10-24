@@ -25,4 +25,8 @@
     <ProjectReference Include="..\JpsStreet.Message.RabbiMQ\JpsStreet.Message.RabbiMQ.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>
