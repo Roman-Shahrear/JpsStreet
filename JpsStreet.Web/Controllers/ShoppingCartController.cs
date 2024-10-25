@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace JpsStreet.Web.Controllers
 {
@@ -12,102 +13,48 @@ namespace JpsStreet.Web.Controllers
     {
         private readonly IShoppingCartService _shoppingCartService;
         private readonly IOrderService _orderService;
-        public ShoppingCartController(IShoppingCartService shoppingCartService, IOrderService orderService)
+        private readonly ILogger<ShoppingCartController> _logger;
+        public ShoppingCartController(IShoppingCartService shoppingCartService, IOrderService orderService, ILogger<ShoppingCartController> logger)
         {
             _shoppingCartService = shoppingCartService;
             _orderService = orderService;
+            _logger = logger;
         }
 
         [Authorize]
         public async Task<IActionResult> CartIndex()
         {
-            return View( await LoadCartDtoBasedOnLoggedInUser());
+            var cartDto = await LoadCartDtoBasedOnLoggedInUser();
+            return View(cartDto);
         }
-
 
         [Authorize]
         public async Task<IActionResult> Checkout()
         {
-            return View(await LoadCartDtoBasedOnLoggedInUser());
-        }
 
-        [HttpPost]
-        [ActionName("Checkout")]
-        public async Task<IActionResult> Checkout(CartDTo cartDTo)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(await LoadCartDtoBasedOnLoggedInUser());
-            }
-
-            CartDTo cart = await LoadCartDtoBasedOnLoggedInUser();
-            cart.CartHeader.Phone = cartDTo.CartHeader.Phone;
-            cart.CartHeader.Email = cartDTo.CartHeader.Email;
-            cart.CartHeader.Name = cartDTo.CartHeader.Name;
-
-            var response = await _orderService.CreateOrder(cart);
-            if (response == null || !response.IsSuccess)
-            {
-                // Log the error response
-                ModelState.AddModelError(string.Empty, "Error creating order.");
-                return View(await LoadCartDtoBasedOnLoggedInUser());
-            }
-
-            OrderHeaderDTo orderHeaderDTo = JsonConvert.DeserializeObject<OrderHeaderDTo>(Convert.ToString(response.Result));
-            if (orderHeaderDTo == null)
-            {
-                // Handle the null case
-                ModelState.AddModelError(string.Empty, "Failed to process the order.");
-                return View(await LoadCartDtoBasedOnLoggedInUser());
-            }
-            //get stripe session and redirect to stripe to place order
-            //
-            var domain = $"{Request.Scheme}://{Request.Host.Value}/";
-            StripeRequestDTo stripeRequestDTo = new()
-            {
-                ApprovedUrl = $"{domain}cart/Confirmation?orderId={orderHeaderDTo.OrderHeaderId}",
-                CancelUrl = $"{domain}cart/checkout",
-                OrderHeader = orderHeaderDTo
-            };
-
-            var stripeResponse = await _orderService.CreateStripeSession(stripeRequestDTo);
-            if (stripeResponse == null || !stripeResponse.IsSuccess)
-            {
-                ModelState.AddModelError(string.Empty, "Failed to create a Stripe session.");
-                return View(await LoadCartDtoBasedOnLoggedInUser());
-            }
-
-            StripeRequestDTo stripeResponseResult = JsonConvert.DeserializeObject<StripeRequestDTo>(Convert.ToString(stripeResponse.Result));
-            if (string.IsNullOrEmpty(stripeResponseResult?.StripeSessionUrl))
-            {
-                ModelState.AddModelError(string.Empty, "Failed to get Stripe session URL.");
-                return View(await LoadCartDtoBasedOnLoggedInUser());
-            }
-
-            Response.Headers.Add("Location", stripeResponseResult.StripeSessionUrl);
-            return new StatusCodeResult(303);
+            var cartDto = await LoadCartDtoBasedOnLoggedInUser();
+            return View(cartDto);
         }
 
         //[HttpPost]
         //[ActionName("Checkout")]
         //public async Task<IActionResult> Checkout(CartDTo cartDto)
         //{
+        //    CartDTo cartDTo = await LoadCartDtoBasedOnLoggedInUser();
 
-        //    CartDTo cart = await LoadCartDtoBasedOnLoggedInUser();
-        //    cart.CartHeader.Phone = cartDto.CartHeader.Phone;
-        //    cart.CartHeader.Email = cartDto.CartHeader.Email;
-        //    cart.CartHeader.Name = cartDto.CartHeader.Name;
+        //    // Populate cart header info
+        //    cartDTo.CartHeader.Phone = cartDto.CartHeader.Phone;
+        //    cartDTo.CartHeader.Email = cartDto.CartHeader.Email;
+        //    cartDTo.CartHeader.Name = cartDto.CartHeader.Name;
 
-        //    var response = await _orderService.CreateOrder(cart);
-        //    OrderHeaderDTo orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderDTo>(Convert.ToString(response.Result));
+        //    var response = await _orderService.CreateOrder(cartDTo);
+        //    var orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderDTo>(response.Result.ToString());
 
-        //    if (response != null && response.IsSuccess)
+        //    if (response.IsSuccess)
         //    {
-        //        //get stripe session and redirect to stripe to place order
-        //        //
-        //        var domain = $"{Request.Scheme}://{Request.Host.Value}/";
-
-        //        StripeRequestDTo stripeRequestDto = new()
+        //        // Create Stripe session
+        //        var domain = $"{Request.Scheme}://{Request.Host}/";
+        //        var stripeRequestDto = new StripeRequestDTo
         //        {
         //            ApprovedUrl = $"{domain}cart/Confirmation?orderId={orderHeaderDto.OrderHeaderId}",
         //            CancelUrl = $"{domain}cart/checkout",
@@ -115,16 +62,108 @@ namespace JpsStreet.Web.Controllers
         //        };
 
         //        var stripeResponse = await _orderService.CreateStripeSession(stripeRequestDto);
-        //        StripeRequestDTo stripeResponseResult = JsonConvert.DeserializeObject<StripeRequestDTo>
-        //                                    (Convert.ToString(stripeResponse.Result));
+        //        var stripeResponseResult = JsonConvert.DeserializeObject<StripeRequestDTo>(stripeResponse.Result.ToString());
+
         //        Response.Headers.Add("Location", stripeResponseResult.StripeSessionUrl);
         //        return new StatusCodeResult(303);
-
-
-
         //    }
+
         //    return View();
         //}
+
+        //[HttpPost]
+        //[ActionName("Checkout")]
+        //public async Task<IActionResult> Checkout(CartDTo cartDto)
+        //{
+
+        //    CartDTo cartDTo = await LoadCartDtoBasedOnLoggedInUser();
+        //    cartDTo.CartHeader.Phone = cartDto.CartHeader?.Phone;
+        //    cartDTo.CartHeader.Email = cartDto.CartHeader?.Email;
+        //    cartDTo.CartHeader.Name = cartDto.CartHeader?.Name;
+
+        //    var response = await _orderService.CreateOrder(cartDTo);
+        //    OrderHeaderDTo? orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderDTo>(response.Result.ToString());
+
+        //    if (response.IsSuccess)
+        //    {
+        //        var domain = $"{Request.Scheme}://{Request.Host}/";
+        //        var stripeRequestDto = new StripeRequestDTo
+        //        {
+        //            ApprovedUrl = $"{domain}cart/Confirmation?orderId={orderHeaderDto.OrderHeaderId}",
+        //            CancelUrl = $"{domain}cart/checkout",
+        //            OrderHeader = orderHeaderDto
+        //        };
+
+        //        var stripeResponse = await _orderService.CreateStripeSession(stripeRequestDto);
+        //        var stripeResponseResult = JsonConvert.DeserializeObject<StripeRequestDTo>(stripeResponse.Result.ToString());
+        //        Response.Headers.Add("Location", stripeResponseResult.StripeSessionUrl);
+        //        return new StatusCodeResult(303);
+        //    }
+
+        //    return View();
+        //}
+
+
+        [HttpPost]
+        [ActionName("Checkout")]
+        public async Task<IActionResult> Checkout(CartDTo cartDto)
+        {
+            CartDTo cartDTo = await LoadCartDtoBasedOnLoggedInUser();
+
+            if (cartDto == null || cartDTo == null)
+            {
+                TempData["error"] = "Cart data is not available. Please try again.";
+                return RedirectToAction(nameof(CartIndex));
+            }
+
+            if (cartDTo.CartHeader == null)
+            {
+                TempData["error"] = "Cart header information is missing. Please check your cart.";
+                return RedirectToAction(nameof(CartIndex));
+            }
+
+            cartDTo.CartHeader.Phone = cartDto.CartHeader?.Phone;
+            cartDTo.CartHeader.Email = cartDto.CartHeader?.Email;
+            cartDTo.CartHeader.Name = cartDto.CartHeader?.Name;
+
+            _logger.LogInformation("Checkout initiated for User ID: {UserId}", User.FindFirstValue(JwtRegisteredClaimNames.Sub));
+            _logger.LogInformation("Cart Data: {@cartDTo}", cartDTo);
+
+            var response = await _orderService.CreateOrder(cartDTo);
+            _logger.LogInformation("Order Creation Response: {@Response}", response);
+
+            if (response.IsSuccess && response.Result != null)
+            {
+                OrderHeaderDTo orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderDTo>(response.Result.ToString());
+
+                var domain = $"{Request.Scheme}://{Request.Host}/";
+                var stripeRequestDto = new StripeRequestDTo
+                {
+                    ApprovedUrl = $"{domain}cart/Confirmation?orderId={orderHeaderDto.OrderHeaderId}",
+                    CancelUrl = $"{domain}cart/checkout",
+                    OrderHeader = orderHeaderDto
+                };
+
+                var stripeResponse = await _orderService.CreateStripeSession(stripeRequestDto);
+                if (stripeResponse != null && stripeResponse.IsSuccess)
+                {
+                    var stripeResponseResult = JsonConvert.DeserializeObject<StripeRequestDTo>(stripeResponse.Result?.ToString());
+                    if (stripeResponseResult?.StripeSessionUrl != null)
+                    {
+                        Response.Headers.Add("Location", stripeResponseResult.StripeSessionUrl);
+                        return new StatusCodeResult(303);
+                    }
+                }
+                else
+                {
+                    TempData["error"] = "Failed to create Stripe session. Please try again.";
+                    return RedirectToAction(nameof(CartIndex));
+                }
+            }
+
+            TempData["error"] = "Order creation was unsuccessful. Please check your details.";
+            return RedirectToAction(nameof(CartIndex));
+        }
 
 
         public async Task<IActionResult> Confirmation(int orderId)

@@ -17,7 +17,7 @@ namespace JpsStreet.Web.Service
             _httpClientFactory = httpClientFactory;
             _tokenProvider = tokenProvider;
         }
-        
+
         public async Task<ResponseDTo?> SendAsync(RequestDTo requestDto, bool withBearer = true)
         {
             try

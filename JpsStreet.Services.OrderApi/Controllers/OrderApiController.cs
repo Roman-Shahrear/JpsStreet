@@ -35,8 +35,8 @@ namespace JpsStreet.Services.OrderApi.Controllers
         }
 
         [Authorize]
-        [HttpPost("orderCreate")]
-        public async Task<ResponseDTo> OrderCreate([FromBody] CartDTo cartDTo)
+        [HttpPost("CreateOrder")]
+        public async Task<ResponseDTo> CreateOrder([FromBody] CartDTo cartDTo)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace JpsStreet.Services.OrderApi.Controllers
         }
 
         [Authorize]
-        [HttpGet("getOrders")]
+        [HttpGet("GetOrders")]
         public ResponseDTo GetOrders(string? userId = "")
         {
             try
@@ -85,7 +85,7 @@ namespace JpsStreet.Services.OrderApi.Controllers
         }
 
         [Authorize]
-        [HttpGet("getOrderById/{orderId:int}")]
+        [HttpGet("GetOrderById/{orderId:int}")]
         public ResponseDTo GetOrderById(int orderId)
         {
             try
@@ -102,7 +102,7 @@ namespace JpsStreet.Services.OrderApi.Controllers
         }
 
         [Authorize]
-        [HttpPost("createStripeSession")]
+        [HttpPost("CreateStripeSession")]
         public async Task<ResponseDTo> CreateStripeSession([FromBody] StripeRequestDTo stripeRequestDTo)
         {
             try
@@ -162,7 +162,7 @@ namespace JpsStreet.Services.OrderApi.Controllers
         }
 
         [Authorize]
-        [HttpPost("validateStripeSession")]
+        [HttpPost("ValidateStripeSession")]
         public async Task<ResponseDTo> ValidateStripeSession([FromBody] int orderHeaderId)
         {
             try
@@ -202,7 +202,7 @@ namespace JpsStreet.Services.OrderApi.Controllers
         }
 
         //[Authorize]
-        [HttpPost("updateOrderStatus/{orderId:int}")]
+        [HttpPost("UpdateOrderStatus/{orderId:int}")]
         public async Task<ResponseDTo> UpdateOrderStatus(int orderId, [FromBody] string newStatus)
         {
             try

@@ -19,7 +19,7 @@ namespace JpsStreet.Web.Service
             {
                 ApiType = SD.ApiType.POST,
                 Data = cartDto,
-                Url = SD.OrderApiBase + "/api/order/orderCreate"
+                Url = SD.OrderApiBase + "/api/order/CreateOrder"
             });
         }
 
@@ -29,7 +29,7 @@ namespace JpsStreet.Web.Service
             {
                 ApiType = SD.ApiType.POST,
                 Data = stripeRequestDto,
-                Url = SD.OrderApiBase + "/api/order/createStripeSession"
+                Url = SD.OrderApiBase + "/api/order/CreateStripeSession"
             });
         }
 
@@ -38,7 +38,7 @@ namespace JpsStreet.Web.Service
             return await _baseService.SendAsync(new RequestDTo()
             {
                 ApiType = SD.ApiType.GET,
-                Url = SD.OrderApiBase + "/api/order/getOrders?userId=" + userId
+                Url = SD.OrderApiBase + "/api/order/GetOrders?userId=" + userId
             });
         }
 
@@ -47,7 +47,7 @@ namespace JpsStreet.Web.Service
             return await _baseService.SendAsync(new RequestDTo()
             {
                 ApiType = SD.ApiType.GET,
-                Url = SD.OrderApiBase + "/api/order/getOrderById/" + orderId
+                Url = SD.OrderApiBase + "/api/order/GetOrderById/" + orderId
             });
         }
 
@@ -57,7 +57,7 @@ namespace JpsStreet.Web.Service
             {
                 ApiType = SD.ApiType.POST,
                 Data = newStatus,
-                Url = SD.OrderApiBase + "/api/order/updateOrderStatus/" + orderId
+                Url = SD.OrderApiBase + "/api/order/UpdateOrderStatus/" + orderId
             });
         }
 
@@ -67,7 +67,7 @@ namespace JpsStreet.Web.Service
             {
                 ApiType = SD.ApiType.POST,
                 Data = orderHeaderId,
-                Url = SD.OrderApiBase + "/api/order/validateStripeSession"
+                Url = SD.OrderApiBase + "/api/order/ValidateStripeSession"
             });
         }
     }

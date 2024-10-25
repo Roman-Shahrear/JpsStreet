@@ -37,7 +37,7 @@ namespace JpsStreet.Services.ShoppingCartApi.Controllers
             _messageRabbitMQ = messageRabbitMQ;
         }
 
-        [HttpGet("getCart/{userId}")]
+        [HttpGet("GetCart/{userId}")]
         public async Task<ResponseDTo> GetCart(string userId)
         {
             try
@@ -78,7 +78,7 @@ namespace JpsStreet.Services.ShoppingCartApi.Controllers
             return _response;
         }
 
-        [HttpPost("applyCoupon")]
+        [HttpPost("ApplyCoupon")]
         public async Task<object> ApplyCoupon([FromBody] CartDTo cartDto)
         {
             try
@@ -97,60 +97,9 @@ namespace JpsStreet.Services.ShoppingCartApi.Controllers
             return _response;
         }
 
-        //[HttpPost("applyCoupon")]
-        //public async Task<object> ApplyCoupon([FromBody] CartDTo cartDto)
-        //{
-        //    try
-        //    {
-        //        // Retrieve the cart header from the database
-        //        var cartFromDb = await _db.CartHeaders.FirstOrDefaultAsync(u => u.UserId == cartDto.CartHeader.UserId);
+        
 
-        //        // Check if the cart exists
-        //        if (cartFromDb == null)
-        //        {
-        //            _response.IsSuccess = false;
-        //            _response.Message = "Cart not found for the given user.";
-        //            return _response;
-        //        }
-
-        //        // Retrieve the coupon using the provided coupon code
-        //        var coupon = await _db.Coupons.FirstOrDefaultAsync(c => c.CouponCode == cartDto.CartHeader.CouponCode);
-
-        //        // Validate the coupon
-        //        if (coupon == null)
-        //        {
-        //            _response.IsSuccess = false;
-        //            _response.Message = "Invalid coupon code.";
-        //            return _response;
-        //        }
-
-        //        // Check if the cart total meets the minimum amount for the coupon
-        //        if (cartFromDb.CartTotal < coupon.MinAmount)
-        //        {
-        //            _response.IsSuccess = false;
-        //            _response.Message = "Cart total does not meet the minimum amount for this coupon.";
-        //            return _response;
-        //        }
-
-        //        // Apply the coupon code
-        //        cartFromDb.CouponCode = coupon.CouponCode;
-        //        _db.CartHeaders.Update(cartFromDb);
-        //        await _db.SaveChangesAsync();
-
-        //        _response.Result = true;
-        //        return _response;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _response.IsSuccess = false;
-        //        _response.Message = ex.ToString();
-        //        return _response;
-        //    }
-        //}
-
-
-
-        [HttpPost("emailCartRequest")]
+        [HttpPost("EmailCartRequest")]
         public async Task<object> EmailCartRequest([FromBody] CartDTo cartDto)
         {
             try
@@ -167,12 +116,12 @@ namespace JpsStreet.Services.ShoppingCartApi.Controllers
         }
 
 
-        [HttpPost("cartUpsert")]
+        [HttpPost("CartUpsert")]
         public async Task<ResponseDTo> CartUpsert(CartDTo cartDTo)
         {
             try
             {
-                var cartHeaderFromDb = await _db.CartHeaders.AsNoTracking().FirstOrDefaultAsync(u=>u.UserId == cartDTo.CartHeader.UserId);
+                var cartHeaderFromDb = await _db.CartHeaders.AsNoTracking().FirstOrDefaultAsync(u => u.UserId == cartDTo.CartHeader.UserId);
                 if (cartHeaderFromDb == null)
                 {
                     // create header and details
@@ -190,7 +139,7 @@ namespace JpsStreet.Services.ShoppingCartApi.Controllers
                     var cartDetailsFromDb = await _db.CartDetails.AsNoTracking().FirstOrDefaultAsync(
                         u => u.ProductId == cartDTo.CartDetails.First().ProductId &&
                         u.CartHeaderId == cartHeaderFromDb.CartHeaderId);
-                    if(cartDetailsFromDb == null)
+                    if (cartDetailsFromDb == null)
                     {
                         // create cartdetails
                         cartDTo.CartDetails.First().CartHeaderId = cartHeaderFromDb.CartHeaderId;
@@ -217,7 +166,7 @@ namespace JpsStreet.Services.ShoppingCartApi.Controllers
             return _response;
         }
 
-        [HttpPost("removeCart")]
+        [HttpPost("RemoveCart")]
         public async Task<ResponseDTo> RemoveCart([FromBody] int cartDetailsId)
         {
             try
@@ -225,7 +174,7 @@ namespace JpsStreet.Services.ShoppingCartApi.Controllers
                 CartDetails cartDetails = _db.CartDetails.First(u => u.CartDetailsId == cartDetailsId);
                 int totalCountOfCartItem = _db.CartDetails.Where(u => u.CartHeaderId == cartDetails.CartHeaderId).Count();
                 _db.CartDetails.Remove(cartDetails);
-                if(totalCountOfCartItem == 1)
+                if (totalCountOfCartItem == 1)
                 {
                     var cartHeaderToRemove = await _db.CartHeaders.FirstOrDefaultAsync(u => u.CartHeaderId == cartDetails.CartHeaderId);
                     _db.CartHeaders.Remove(cartHeaderToRemove);

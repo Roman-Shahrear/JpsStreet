@@ -20,10 +20,12 @@ builder.Services.AddHttpClient<IShoppingCartService, ShoppingCartService>();
 builder.Services.AddHttpClient<IOrderService, OrderService>();
 // For populate Base Api from SD
 SD.CouponApiBase = builder.Configuration["ServiceUrls:CouponApiBase"];
-SD.AuthApiBase = builder.Configuration["ServiceUrls:AuthApiBase"];
-SD.ProductApiBase = builder.Configuration["ServiceUrls:ProductApiBase"];
 SD.ShoppingCartApiBase = builder.Configuration["ServiceUrls:OrderApiBase"];
 SD.ShoppingCartApiBase = builder.Configuration["ServiceUrls:ShoppingCartApiBase"];
+SD.AuthApiBase = builder.Configuration["ServiceUrls:AuthApiBase"];
+SD.ProductApiBase = builder.Configuration["ServiceUrls:ProductApiBase"];
+
+
 
 
 // Register for lifetime

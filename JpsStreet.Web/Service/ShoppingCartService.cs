@@ -28,7 +28,7 @@ namespace JpsStreet.Web.Service
             {
                 ApiType = SD.ApiType.POST,
                 Data = cartDTo,
-                Url = SD.ShoppingCartApiBase + "/api/cart/emailCartRequest"
+                Url = SD.ShoppingCartApiBase + "/api/cart/EmailCartRequest"
             });
         }
 
