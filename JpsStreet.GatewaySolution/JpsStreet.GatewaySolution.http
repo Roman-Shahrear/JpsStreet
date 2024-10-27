@@ -1,0 +1,6 @@
+@JpsStreet.GatewaySolution_HostAddress = http://localhost:5210
+
+GET {{JpsStreet.GatewaySolution_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

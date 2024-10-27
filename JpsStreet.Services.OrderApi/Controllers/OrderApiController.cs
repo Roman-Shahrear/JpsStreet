@@ -54,7 +54,8 @@ namespace JpsStreet.Services.OrderApi.Controllers
             catch (Exception ex)
             {
                 _response.IsSuccess = false;
-                _response.Message = ex.Message;
+                //_response.Message = ex.Message;
+                _response.Message = ex.InnerException?.Message ?? ex.Message;
             }
             return _response;
         }

@@ -71,37 +71,6 @@ namespace JpsStreet.Web.Controllers
         //    return View();
         //}
 
-        //[HttpPost]
-        //[ActionName("Checkout")]
-        //public async Task<IActionResult> Checkout(CartDTo cartDto)
-        //{
-
-        //    CartDTo cartDTo = await LoadCartDtoBasedOnLoggedInUser();
-        //    cartDTo.CartHeader.Phone = cartDto.CartHeader?.Phone;
-        //    cartDTo.CartHeader.Email = cartDto.CartHeader?.Email;
-        //    cartDTo.CartHeader.Name = cartDto.CartHeader?.Name;
-
-        //    var response = await _orderService.CreateOrder(cartDTo);
-        //    OrderHeaderDTo? orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderDTo>(response.Result.ToString());
-
-        //    if (response.IsSuccess)
-        //    {
-        //        var domain = $"{Request.Scheme}://{Request.Host}/";
-        //        var stripeRequestDto = new StripeRequestDTo
-        //        {
-        //            ApprovedUrl = $"{domain}cart/Confirmation?orderId={orderHeaderDto.OrderHeaderId}",
-        //            CancelUrl = $"{domain}cart/checkout",
-        //            OrderHeader = orderHeaderDto
-        //        };
-
-        //        var stripeResponse = await _orderService.CreateStripeSession(stripeRequestDto);
-        //        var stripeResponseResult = JsonConvert.DeserializeObject<StripeRequestDTo>(stripeResponse.Result.ToString());
-        //        Response.Headers.Add("Location", stripeResponseResult.StripeSessionUrl);
-        //        return new StatusCodeResult(303);
-        //    }
-
-        //    return View();
-        //}
 
 
         [HttpPost]
@@ -125,6 +94,15 @@ namespace JpsStreet.Web.Controllers
             cartDTo.CartHeader.Phone = cartDto.CartHeader?.Phone;
             cartDTo.CartHeader.Email = cartDto.CartHeader?.Email;
             cartDTo.CartHeader.Name = cartDto.CartHeader?.Name;
+
+            // Validate cart header fields
+            if (string.IsNullOrEmpty(cartDTo.CartHeader.Phone) ||
+                string.IsNullOrEmpty(cartDTo.CartHeader.Email) ||
+                string.IsNullOrEmpty(cartDTo.CartHeader.Name))
+            {
+                TempData["error"] = "All cart header fields are required.";
+                return RedirectToAction(nameof(CartIndex));
+            }
 
             _logger.LogInformation("Checkout initiated for User ID: {UserId}", User.FindFirstValue(JwtRegisteredClaimNames.Sub));
             _logger.LogInformation("Cart Data: {@cartDTo}", cartDTo);
@@ -156,11 +134,14 @@ namespace JpsStreet.Web.Controllers
                 }
                 else
                 {
+                    _logger.LogWarning("Stripe session creation failed: {@StripeResponse}", stripeResponse);
                     TempData["error"] = "Failed to create Stripe session. Please try again.";
                     return RedirectToAction(nameof(CartIndex));
                 }
             }
 
+            // Log specific error if order creation failed
+            _logger.LogWarning("Order creation was unsuccessful.");
             TempData["error"] = "Order creation was unsuccessful. Please check your details.";
             return RedirectToAction(nameof(CartIndex));
         }

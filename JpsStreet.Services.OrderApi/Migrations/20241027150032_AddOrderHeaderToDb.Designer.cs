@@ -4,6 +4,7 @@ using JpsStreet.Services.OrderApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JpsStreet.Services.OrderApi.Migrations
 {
     [DbContext(typeof(OrderAppDbContext))]
-    partial class OrderAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241027150032_AddOrderHeaderToDb")]
+    partial class AddOrderHeaderToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
