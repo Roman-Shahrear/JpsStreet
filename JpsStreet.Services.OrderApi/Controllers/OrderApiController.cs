@@ -54,8 +54,6 @@ namespace JpsStreet.Services.OrderApi.Controllers
             catch (Exception ex)
             {
                 _response.IsSuccess = false;
-                //_response.Message = ex.Message;
-                _response.Message = ex.InnerException?.Message ?? ex.Message;
             }
             return _response;
         }
@@ -168,7 +166,7 @@ namespace JpsStreet.Services.OrderApi.Controllers
         {
             try
             {
-                OrderHeader orderHeader = _db.OrderHeaders.First(u => u.OrderHeaderId == orderHeaderId);
+                OrderHeader orderHeader =  _db.OrderHeaders.First(u => u.OrderHeaderId == orderHeaderId);
 
                 var service = new SessionService();
                 Session session = service.Get(orderHeader.StripeSessionId);

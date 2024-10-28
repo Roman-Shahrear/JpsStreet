@@ -68,83 +68,72 @@ namespace JpsStreet.Web.Controllers
         //        return new StatusCodeResult(303);
         //    }
 
-        //    return View();
+        //    return View(cartDTo);
         //}
 
+        
 
+        //[HttpPost]
+        //[ActionName("Checkout")]
+        //public async Task<IActionResult> Checkout(CartDTo cartDto)
+        //{
+        //    CartDTo cartDTo = await LoadCartDtoBasedOnLoggedInUser();
 
-        [HttpPost]
-        [ActionName("Checkout")]
-        public async Task<IActionResult> Checkout(CartDTo cartDto)
-        {
-            CartDTo cartDTo = await LoadCartDtoBasedOnLoggedInUser();
+        //    if (cartDto == null || cartDTo == null)
+        //    {
+        //        TempData["error"] = "Cart data is not available. Please try again.";
+        //        return RedirectToAction(nameof(CartIndex));
+        //    }
 
-            if (cartDto == null || cartDTo == null)
-            {
-                TempData["error"] = "Cart data is not available. Please try again.";
-                return RedirectToAction(nameof(CartIndex));
-            }
+        //    if (cartDTo.CartHeader == null)
+        //    {
+        //        TempData["error"] = "Cart header information is missing. Please check your cart.";
+        //        return RedirectToAction(nameof(CartIndex));
+        //    }
 
-            if (cartDTo.CartHeader == null)
-            {
-                TempData["error"] = "Cart header information is missing. Please check your cart.";
-                return RedirectToAction(nameof(CartIndex));
-            }
+        //    cartDTo.CartHeader.Phone = cartDto.CartHeader?.Phone;
+        //    cartDTo.CartHeader.Email = cartDto.CartHeader?.Email;
+        //    cartDTo.CartHeader.Name = cartDto.CartHeader?.Name;
 
-            cartDTo.CartHeader.Phone = cartDto.CartHeader?.Phone;
-            cartDTo.CartHeader.Email = cartDto.CartHeader?.Email;
-            cartDTo.CartHeader.Name = cartDto.CartHeader?.Name;
+        //    _logger.LogInformation("Checkout initiated for User ID: {UserId}", User.FindFirstValue(JwtRegisteredClaimNames.Sub));
+        //    _logger.LogInformation("Cart Data: {@CartDTo}", cartDTo);
 
-            // Validate cart header fields
-            if (string.IsNullOrEmpty(cartDTo.CartHeader.Phone) ||
-                string.IsNullOrEmpty(cartDTo.CartHeader.Email) ||
-                string.IsNullOrEmpty(cartDTo.CartHeader.Name))
-            {
-                TempData["error"] = "All cart header fields are required.";
-                return RedirectToAction(nameof(CartIndex));
-            }
+        //    var response = await _orderService.CreateOrder(cartDTo);
+        //    _logger.LogInformation("Order Creation Response: {@Response}", response);
 
-            _logger.LogInformation("Checkout initiated for User ID: {UserId}", User.FindFirstValue(JwtRegisteredClaimNames.Sub));
-            _logger.LogInformation("Cart Data: {@cartDTo}", cartDTo);
+        //    if (response.IsSuccess && response.Result != null)
+        //    {
+        //        OrderHeaderDTo orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderDTo>(response.Result.ToString());
 
-            var response = await _orderService.CreateOrder(cartDTo);
-            _logger.LogInformation("Order Creation Response: {@Response}", response);
+        //        var domain = $"{Request.Scheme}://{Request.Host}/";
+        //        var stripeRequestDto = new StripeRequestDTo
+        //        {
+        //            ApprovedUrl = $"{domain}cart/Confirmation?orderId={orderHeaderDto.OrderHeaderId}",
+        //            CancelUrl = $"{domain}cart/checkout",
+        //            OrderHeader = orderHeaderDto
+        //        };
 
-            if (response.IsSuccess && response.Result != null)
-            {
-                OrderHeaderDTo orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderDTo>(response.Result.ToString());
+        //        var stripeResponse = await _orderService.CreateStripeSession(stripeRequestDto);
+        //        if (stripeResponse != null && stripeResponse.IsSuccess)
+        //        {
+        //            var stripeResponseResult = JsonConvert.DeserializeObject<StripeRequestDTo>(stripeResponse.Result?.ToString());
+        //            if (stripeResponseResult?.StripeSessionUrl != null)
+        //            {
+        //                Response.Headers.Add("Location", stripeResponseResult.StripeSessionUrl);
+        //                return new StatusCodeResult(303);
+        //            }
+        //        }
 
-                var domain = $"{Request.Scheme}://{Request.Host}/";
-                var stripeRequestDto = new StripeRequestDTo
-                {
-                    ApprovedUrl = $"{domain}cart/Confirmation?orderId={orderHeaderDto.OrderHeaderId}",
-                    CancelUrl = $"{domain}cart/checkout",
-                    OrderHeader = orderHeaderDto
-                };
+        //        _logger.LogWarning("Stripe session creation failed: {@StripeResponse}", stripeResponse);
+        //        TempData["error"] = "Failed to create Stripe session. Please try again.";
+        //        return RedirectToAction(nameof(CartIndex));
+        //    }
 
-                var stripeResponse = await _orderService.CreateStripeSession(stripeRequestDto);
-                if (stripeResponse != null && stripeResponse.IsSuccess)
-                {
-                    var stripeResponseResult = JsonConvert.DeserializeObject<StripeRequestDTo>(stripeResponse.Result?.ToString());
-                    if (stripeResponseResult?.StripeSessionUrl != null)
-                    {
-                        Response.Headers.Add("Location", stripeResponseResult.StripeSessionUrl);
-                        return new StatusCodeResult(303);
-                    }
-                }
-                else
-                {
-                    _logger.LogWarning("Stripe session creation failed: {@StripeResponse}", stripeResponse);
-                    TempData["error"] = "Failed to create Stripe session. Please try again.";
-                    return RedirectToAction(nameof(CartIndex));
-                }
-            }
+        //    _logger.LogWarning("Order creation failed with status: {StatusCode} and message: {Message}", response.StatusCode, response.ErrorMessage);
+        //    TempData["error"] = "Order creation was unsuccessful. Please check your details.";
+        //    return RedirectToAction(nameof(CartIndex));
+        //}
 
-            // Log specific error if order creation failed
-            _logger.LogWarning("Order creation was unsuccessful.");
-            TempData["error"] = "Order creation was unsuccessful. Please check your details.";
-            return RedirectToAction(nameof(CartIndex));
-        }
 
 
         public async Task<IActionResult> Confirmation(int orderId)
