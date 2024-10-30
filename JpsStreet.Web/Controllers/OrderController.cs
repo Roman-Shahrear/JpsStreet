@@ -16,7 +16,7 @@ namespace JpsStreet.Web.Controllers
         {
             _orderService = orderService;
         }
-        
+
         [Authorize]
         public IActionResult Index()
         {
@@ -34,7 +34,7 @@ namespace JpsStreet.Web.Controllers
             {
                 orderHeaderDTo = JsonConvert.DeserializeObject<OrderHeaderDTo>(Convert.ToString(response.Result));
             }
-            if(!User.IsInRole(SD.RoleAdmin) && userId!= orderHeaderDTo.UserId)
+            if (!User.IsInRole(SD.RoleAdmin) && userId != orderHeaderDTo.UserId)
             {
                 return NotFound();
             }
@@ -45,7 +45,7 @@ namespace JpsStreet.Web.Controllers
         public async Task<IActionResult> OrderReadyForPickup(int orderId)
         {
             var response = await _orderService.UpdateOrderStatus(orderId, SD.Status_ReadyForPickup);
-            if(response != null && response.IsSuccess)
+            if (response != null && response.IsSuccess)
             {
                 TempData["success"] = "Status updated successfully";
                 return RedirectToAction(nameof(OrderDetails), new { orderId = orderId });
