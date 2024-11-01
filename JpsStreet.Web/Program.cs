@@ -3,32 +3,27 @@ using JpsStreet.Web.Service.IService;
 using JpsStreet.Web.Utility;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// For configure HttpClient need to call this Services
+// Configure HttpClient for dependency injection
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddHttpClient();
-// Finally configure HttpClient
 builder.Services.AddHttpClient<ICouponService, CouponService>();
 builder.Services.AddHttpClient<IAuthService, AuthService>();
 builder.Services.AddHttpClient<IProductService, ProductService>();
 builder.Services.AddHttpClient<IShoppingCartService, ShoppingCartService>();
 builder.Services.AddHttpClient<IOrderService, OrderService>();
-// For populate Base Api from SD
+
+// Populate Base Api URLs from configuration
 SD.CouponApiBase = builder.Configuration["ServiceUrls:CouponApiBase"];
-SD.ShoppingCartApiBase = builder.Configuration["ServiceUrls:OrderApiBase"];
+SD.OrderApiBase = builder.Configuration["ServiceUrls:OrderApiBase"]; // Fixed duplicate key
 SD.ShoppingCartApiBase = builder.Configuration["ServiceUrls:ShoppingCartApiBase"];
 SD.AuthApiBase = builder.Configuration["ServiceUrls:AuthApiBase"];
 SD.ProductApiBase = builder.Configuration["ServiceUrls:ProductApiBase"];
 
-
-
-
-// Register for lifetime
+// Register services with scoped lifetime
 builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<IProductService, ProductService>();
@@ -37,8 +32,7 @@ builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 
-
-// Register Authentication and adding cookie
+// Register Authentication and configure cookie settings
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -53,7 +47,6 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 

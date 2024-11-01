@@ -45,10 +45,10 @@ namespace JpsStreet.Services.OrderApi.Controllers
                 orderHeaderDTo.Status = SD.Status_Pending;
                 orderHeaderDTo.OrderDetails = _mapper.Map<IEnumerable<OrderDetailsDTo>>(cartDTo.CartDetails);
                 orderHeaderDTo.OrderTotal = Math.Round(orderHeaderDTo.OrderTotal, 2);
-                OrderHeader orederCreated = _db.OrderHeaders.Add(_mapper.Map<OrderHeader>(orderHeaderDTo)).Entity;
+                OrderHeader orderCreated = _db.OrderHeaders.Add(_mapper.Map<OrderHeader>(orderHeaderDTo)).Entity;
                 await _db.SaveChangesAsync();
 
-                orderHeaderDTo.OrderHeaderId = orederCreated.OrderHeaderId;
+                orderHeaderDTo.OrderHeaderId = orderCreated.OrderHeaderId;
                 _response.Result = orderHeaderDTo;
             }
             catch (Exception ex)
@@ -57,6 +57,7 @@ namespace JpsStreet.Services.OrderApi.Controllers
             }
             return _response;
         }
+
 
         [Authorize]
         [HttpGet("GetOrders")]
@@ -67,7 +68,7 @@ namespace JpsStreet.Services.OrderApi.Controllers
                 List<OrderHeader> objList;
                 if (User.IsInRole(SD.RoleAdmin))
                 {
-                    objList = _db.OrderHeaders.Include(u => u.OrderDetails).OrderByDescending(u=>u.OrderHeaderId).ToList();
+                    objList = _db.OrderHeaders.Include(u => u.OrderDetails).OrderByDescending(u => u.OrderHeaderId).ToList();
                 }
                 else
                 {
@@ -166,7 +167,7 @@ namespace JpsStreet.Services.OrderApi.Controllers
         {
             try
             {
-                OrderHeader orderHeader =  _db.OrderHeaders.First(u => u.OrderHeaderId == orderHeaderId);
+                OrderHeader orderHeader = _db.OrderHeaders.First(u => u.OrderHeaderId == orderHeaderId);
 
                 var service = new SessionService();
                 Session session = service.Get(orderHeader.StripeSessionId);
@@ -174,7 +175,7 @@ namespace JpsStreet.Services.OrderApi.Controllers
                 var paymentIntentService = new PaymentIntentService();
                 PaymentIntent paymentIntent = paymentIntentService.Get(session.PaymentIntentId);
 
-                if(paymentIntent.Status == "succeed")
+                if (paymentIntent.Status == "succeed")
                 {
                     // then payment was successful
                     orderHeader.PaymentIntentId = paymentIntent.Id;
@@ -207,9 +208,9 @@ namespace JpsStreet.Services.OrderApi.Controllers
             try
             {
                 OrderHeader orderHeader = _db.OrderHeaders.First(u => u.OrderHeaderId == orderId);
-                if(orderHeader != null)
+                if (orderHeader != null)
                 {
-                    if(newStatus == SD.Status_Cancelled)
+                    if (newStatus == SD.Status_Cancelled)
                     {
                         // We will give refund
                         var options = new RefundCreateOptions
